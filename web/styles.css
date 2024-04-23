@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: orange;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: greenyellow;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 44px;
+    margin-bottom: 30px;
+    text-align: center;
+    background-color: gold;
+}
+
+#inputContainer {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+#todoText {
+    width: calc(95% - 7px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: auto;     
+    margin-right: auto; 
+}
+
+
+#addButton {
+    padding: 12px 24px; 
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+
+#addButton:hover {
+    background-color: #0056b3;
+}
+
+#taskContainer {
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+li .text-container {
+    flex: 1; /* Allow the text container to grow and shrink */
+    overflow: hidden; /* Hide overflow text */
+    white-space: nowrap; /* Prevent text wrapping */
+    text-overflow: ellipsis; /* Truncate overflow text with ellipsis */
+}
+li button {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 10px; /* Set fixed margin for all buttons */
+}
+
+li button:hover {
+    background-color: #c82333;
+}
+
+li.complete {
+    background-color: #d4edda;
+}
+
+li.complete button {
+    background-color: #28a745;
+}
+
+li.complete button:hover {
+    background-color: #218838;
+}
+
+li.complete span {
+    text-decoration: line-through;
+}

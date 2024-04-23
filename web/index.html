@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <link rel="stylesheet" href="styles.css">
+    <input type="text" id="todoText" placeholder="Enter a new task">
+    <button onclick="addTodo()">Add</button>
+
+    <ul id="todoList"></ul>
+
+    <script>
+        function fetchTodos() {
+    fetch('http://localhost:8081/todos')
+        .then(response => response.json())
+        .then(todos => {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+
+            todos.forEach(todo => {
+                const listItem = document.createElement('li');
+
+                const taskText = document.createElement('span');
+                taskText.textContent = todo.text;
+                listItem.appendChild(taskText);
+
+                const updateButton = document.createElement('button');
+                updateButton.textContent = 'Update';
+                updateButton.onclick = () => updateTodo(todo.id);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteTodo(todo.id);
+
+                const completeButton = document.createElement('button');
+                completeButton.textContent = 'Complete';
+                completeButton.onclick = () => completeTodo(todo.id);
+
+                listItem.appendChild(updateButton);
+                listItem.appendChild(deleteButton);
+                listItem.appendChild(completeButton);
+
+                if (todo.completed) {
+                    listItem.classList.add('complete');
+                }
+
+                todoList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error('Error fetching todos:', error));
+}
+
+
+        function addTodo() {
+            const todoText = document.getElementById('todoText').value;
+
+            fetch('http://localhost:8081/todos/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: todoText }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    fetchTodos();
+                } else {
+                    console.error('Failed to add todo:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error adding todo:', error));
+        }
+
+        function updateTodo(id) {
+            const newText = prompt('Enter new text:');
+            if (newText !== null) {
+                fetch(`http://localhost:8081/todos/update?id=${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id, text: newText }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        fetchTodos();
+                    } else {
+                        console.error('Failed to update todo:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error updating todo:', error));
+            }
+        }
+
+        function deleteTodo(id) {
+    fetch(`http://localhost:8081/todos/remove`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id }),
+    })
+    .then(response => {
+        if (response.ok) {
+            fetchTodos();
+        } else {
+            console.error('Failed to delete todo:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error deleting todo:', error));
+}
+function completeTodo(id) {
+    fetch(`http://localhost:8081/todos/complete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id }),
+    })
+    .then(response => {
+        if (response.ok) {
+            fetchTodos();
+        } else {
+            console.error('Failed to mark todo as complete:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error marking todo as complete:', error));
+}
+
+
+
+
+        fetchTodos();
+    </script>
+</body>
+</html>
